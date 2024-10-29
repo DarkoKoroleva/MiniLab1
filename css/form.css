@@ -20,3 +20,14 @@
 .underlined_text:hover {
   cursor: pointer;
 }
+
+.invalid {
+  border: 2px solid red;
+  background-color: #ffe6e6;
+}
+
+/* Стили для валидного поля */
+.valid {
+  border: 2px solid green;
+  background-color: #e6ffe6;
+}

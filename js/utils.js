@@ -6,12 +6,28 @@ const formValidation = {}  // Сюда пишутся статусы валид�
 // Объявляется и инициализируется константная переменная
 // Инициализация функцией, заданной в стрелочном виде
 export const validatePassword = (e) => {
-  formValidation.password = e.target.value
+  const password = e.target.value;
   console.log("Password validation...")
   console.log(e)
-  // Напишите код валидации здесь и присвойте true/false в объект(словарь) formValidation
-  // formValidation.password = ...  // formValidation['password'] = ... - то же самое, но другой синтаксис
-  return formValidation.password !== undefined   // Это заглушка, return вероятно надо переписать
+
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumber = /[0-9]/.test(password);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}]/.test(password);
+  const isValidLength = password.length >= 8;
+
+  const isPasswordValid = hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && isValidLength;
+  formValidation.password = isPasswordValid;
+
+  if (isPasswordValid) {
+    e.target.classList.remove("invalid");
+    e.target.classList.add("valid");
+  } else {
+    e.target.classList.remove("valid");
+    e.target.classList.add("invalid");
+  }
+
+  return isPasswordValid;
 }
 
 
