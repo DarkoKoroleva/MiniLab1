@@ -8,7 +8,7 @@ const formValidation = {}  // Сюда пишутся статусы валид�
 export const validatePassword = (e) => {
   const password = e.target.value;
   console.log("Password validation...")
-  console.log(e)
+  //console.log(e)
 
   const hasUpperCase = /[A-Z]/.test(password);
   const hasLowerCase = /[a-z]/.test(password);
@@ -28,6 +28,25 @@ export const validatePassword = (e) => {
   }
 
   return isPasswordValid;
+}
+
+export const validateRepeatPassword = (e) => {
+  const repeat_password = e.target.value;
+  const password = document.getElementById('password').value;
+
+  const isValid = repeat_password === password;
+  console.log(password);
+  console.log(repeat_password);
+
+  if (isValid) {
+    e.target.classList.remove("invalid");
+    e.target.classList.add("valid");
+  } else {
+    e.target.classList.remove("valid");
+    e.target.classList.add("invalid");
+  }
+
+  return repeat_password === password;
 }
 
 

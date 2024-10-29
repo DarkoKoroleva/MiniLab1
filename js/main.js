@@ -1,4 +1,4 @@
-import {setFormValue, submitSignUpForm, validateEmail, validatePassword} from "./utils.js"
+import {setFormValue, submitSignUpForm, validateEmail, validatePassword, validateRepeatPassword} from "./utils.js"
 
 
 ////// ДЕМОНСТРАЦИОННЫЙ УЧАСТОК КОДА. На оценку не влияет, исключительно для саморазвития.
@@ -34,6 +34,7 @@ import {setFormValue, submitSignUpForm, validateEmail, validatePassword} from ".
 const first_name_id = 'first_name'
 const last_name_id = 'last_name'
 const password_id = 'password'
+const password_repeat_id = 'password-repeat';
 const email_id = 'email'
 
 const sign_in_link_id = 'sign_in_link'
@@ -55,7 +56,10 @@ const email = document.getElementById(email_id);
 email.oninput = (e) => setFormValue(email_id, e.target.value, validateEmail) // Установить значение с валидацией
 
 const password = document.getElementById(password_id);
-password.oninput = (e) => setFormValue(password_id, e.target.value, validatePassword) // Установить значение с валидацией
+password.oninput = (e) => setFormValue(password_id, e, validatePassword) // Установить значение с валидацией
+
+const password_repeat = document.getElementById(password_repeat_id);
+password_repeat.oninput = (e) => setFormValue(password_repeat_id, e, validateRepeatPassword);
 
 // Меняем стили объекта DOM дерева. Это позволяет скрыть форму регистрации и показать форму авторизации
 // Объект формы не исключается из DOM дерева, а просто становистя невидимым
