@@ -1,14 +1,18 @@
 const formValues = {}  // Сюда пишутся значения формы (Object как в Java, или dict из Python)
-const formValidation = {}  // Сюда пишутся статусы валидации каждого поля. Если поле ни разу не валидировалось,
+const formValidation = {
+  first_name: false,
+  last_name: false,
+  email: false,
+  password: false,
+  password_repeat: false
+}; // Сюда пишутся статусы валидации каждого поля. Если поле ни разу не валидировалось,
 // то при обращении к Object вернётся undefined, который при логическом сравнении обрабатывается как false
 
 
 // Объявляется и инициализируется константная переменная
 // Инициализация функцией, заданной в стрелочном виде
-export const validatePassword = (e) => {
-  const password = e.target.value;
+export const validatePassword = (password) => {
   console.log("Password validation...")
-  //console.log(e)
 
   const hasUpperCase = /[A-Z]/.test(password);
   const hasLowerCase = /[a-z]/.test(password);
@@ -17,34 +21,15 @@ export const validatePassword = (e) => {
   const isValidLength = password.length >= 8;
 
   const isPasswordValid = hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar && isValidLength;
-  formValidation.password = isPasswordValid;
-
-  if (isPasswordValid) {
-    e.target.classList.remove("invalid");
-    e.target.classList.add("valid");
-  } else {
-    e.target.classList.remove("valid");
-    e.target.classList.add("invalid");
-  }
 
   return isPasswordValid;
 }
 
-export const validateRepeatPassword = (e) => {
-  const repeat_password = e.target.value;
+export const validateRepeatPassword = (repeat_password) => {
   const password = document.getElementById('password').value;
-
-  const isValid = repeat_password === password;
   console.log(password);
   console.log(repeat_password);
-
-  if (isValid) {
-    e.target.classList.remove("invalid");
-    e.target.classList.add("valid");
-  } else {
-    e.target.classList.remove("valid");
-    e.target.classList.add("invalid");
-  }
+  console.log(repeat_password === password);
 
   return repeat_password === password;
 }
@@ -66,6 +51,8 @@ export const getValidationStatus = () => {
   // Происходит функциональная мгаия, читай строчку кода ниже как:
   // Получить значения (не ключи) из объекта, затем применить к каждому значению функцию двойного логического отрицания
   // (преобразование к булевому типу) и результаты всех применений это true, то вернуть true, иначе - false
+  console.log(formValidation);
+
   return Object.values(formValidation).every((validationStatus) => !!validationStatus)
 }
 
@@ -75,6 +62,8 @@ export const setFormValue = (valueKey, newValue, validator) => {
   formValues[valueKey] = newValue
   if (validator !== undefined) {
     formValidation[valueKey] = validator(newValue)
+  } else {
+    formValidation[valueKey] = true
   }
 }
 

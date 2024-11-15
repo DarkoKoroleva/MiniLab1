@@ -1,4 +1,4 @@
-import {setFormValue, submitSignUpForm, validateEmail, validatePassword, validateRepeatPassword} from "./utils.js"
+import {setFormValue, submitSignUpForm, validateEmail, validatePassword, validateRepeatPassword, getValidationStatus} from "./utils.js"
 
 
 ////// ДЕМОНСТРАЦИОННЫЙ УЧАСТОК КОДА. На оценку не влияет, исключительно для саморазвития.
@@ -34,13 +34,12 @@ import {setFormValue, submitSignUpForm, validateEmail, validatePassword, validat
 const first_name_id = 'first_name'
 const last_name_id = 'last_name'
 const password_id = 'password'
-const password_repeat_id = 'password-repeat';
+const password_repeat_id = 'password_repeat';
 const email_id = 'email'
 
 const sign_in_link_id = 'sign_in_link'
 const sign_up_link_id = 'sign_up_link'
 const sign_up_form_id = 'sign_up_form'
-//const sign_in_form_id = 'sign_in_form'  // Пригодится
 const sign_up_btn_id = 'sign_up_btn'
 const sign_in_form_id = 'sign_in_form'
 
@@ -51,19 +50,68 @@ const sign_in_form_id = 'sign_in_form'
 // Гуглить по тегам "события JS", "onchange/oninput HTML", "стрелочные функции JS", ...
 
 const first_name = document.getElementById(first_name_id);
-first_name.oninput = (e) => setFormValue(first_name_id, e.target.value)  // Установить значение без валидации
+first_name.oninput = (e) => {
+  setFormValue(first_name_id, e.target.value)
+  checkFormValidity();
+}  // Установить значение без валидации
+
+const last_name = document.getElementById(last_name_id);
+last_name.oninput = (e) => {
+  setFormValue(last_name_id, e.target.value);
+  checkFormValidity();
+};
 
 const email = document.getElementById(email_id);
-email.oninput = (e) => setFormValue(email_id, e.target.value, validateEmail) // Установить значение с валидацией
+email.oninput = (e) => {
+  setFormValue(email_id, e.target.value, validateEmail)
+  checkFormValidity();
+} // Установить значение с валидацией
 
 const password = document.getElementById(password_id);
-password.oninput = (e) => setFormValue(password_id, e, validatePassword) // Установить значение с валидацией
+password.oninput = (e) => {
+  setFormValue(password_id, e.target.value, validatePassword);
+  checkFormValidity();
+}
 
 const password_repeat = document.getElementById(password_repeat_id);
-password_repeat.oninput = (e) => setFormValue(password_repeat_id, e, validateRepeatPassword);
+password_repeat.oninput = (e) => {
+  setFormValue(password_repeat_id, e.target.value, validateRepeatPassword);
+  checkFormValidity();
+}
+
+const onPasswordChange = (e) => {
+  if (!validatePassword(password.value)) {
+    password.classList.remove("valid")
+    password.classList.add("invalid")
+  } else {
+    password.classList.remove("invalid")
+    password.classList.add("valid")
+  }
+  onRepeatPasswordChange(e);
+}
+
+const onRepeatPasswordChange = (e) => {
+  if (password.value !== password_repeat.value) {
+    password_repeat.classList.remove("valid")
+    password_repeat.classList.add("invalid")
+  } else {
+    password_repeat.classList.remove("invalid")
+    password_repeat.classList.add("valid")
+  }
+}
+
+password.addEventListener('change', onPasswordChange)
+password_repeat.addEventListener('change', onRepeatPasswordChange)
+
+function checkFormValidity() {
+  const isValid = getValidationStatus();
+  const submitButton = document.getElementById(sign_up_btn_id);
+  submitButton.disabled = !isValid;
+  console.log('Form is valid:', isValid);
+}
 
 // Меняем стили объекта DOM дерева. Это позволяет скрыть форму регистрации и показать форму авторизации
-// Объект формы не исключается из DOM дерева, а просто становистя невидимым
+// Объект формы не исключается из DOM дерева, а просто становится невидимым
 const switch_to_sign_in = document.getElementById(sign_in_link_id);
 switch_to_sign_in.onclick = (e) => {
   document.getElementById(sign_up_form_id).style.display = "none"
